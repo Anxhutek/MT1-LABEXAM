@@ -4,300 +4,385 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shopping Cart Management - MT1 Lab Exam</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #2563eb;
-      --primary-dark: #1d4ed8;
-      --success: #16a34a;
-      --bg: #f8fafc;
-      --card-bg: #ffffff;
-      --text-main: #1e293b;
-      --text-muted: #64748b;
-      --border: #e2e8f0;
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --surface-light: #334155;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+      --accent: #10b981;
+      --warning: #f59e0b;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     }
 
     body {
       background-color: var(--bg);
-      color: var(--text-main);
-      line-height: 1.6;
-      padding-bottom: 40px;
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
-    header {
-      background: linear-gradient(135deg, #1e40af, #3b82f6);
+    .navbar {
+      background: rgba(30, 41, 59, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 800;
+      font-size: 1.25rem;
       color: white;
-      padding: 2.5rem 1rem;
-      text-align: center;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
 
-    header h1 {
-      font-size: 2.2rem;
-      font-weight: 700;
+    .brand-icon {
+      background: linear-gradient(135deg, #6366f1, #a855f7);
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.875rem;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+
+    .nav-links a:hover, .nav-links a.active {
+      color: white;
+      background: var(--surface-light);
+    }
+
+    .hero {
+      padding: 3rem 1.5rem 2rem;
+      text-align: center;
+      background: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.15), transparent 70%);
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      color: #818cf8;
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -0.025em;
       margin-bottom: 0.5rem;
     }
 
-    header p {
-      font-size: 1.1rem;
-      opacity: 0.9;
-    }
-
-    .badge {
-      display: inline-block;
-      background: rgba(255, 255, 255, 0.2);
-      padding: 0.3rem 0.8rem;
-      border-radius: 9999px;
-      font-size: 0.85rem;
-      margin-top: 0.5rem;
-      font-weight: 600;
+    .hero p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 600px;
+      margin: 0 auto;
     }
 
     .container {
-      max-width: 1100px;
-      margin: 2rem auto;
-      padding: 0 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1.5rem;
+      flex: 1;
+      width: 100%;
     }
 
-    .nav-tabs {
-      display: flex;
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 1rem;
       margin-bottom: 2rem;
-      justify-content: center;
     }
 
-    .nav-tabs a {
-      text-decoration: none;
-      color: var(--primary);
-      background: white;
-      padding: 0.6rem 1.2rem;
-      border-radius: 8px;
-      font-weight: 600;
+    .stat-card {
+      background: var(--surface);
       border: 1px solid var(--border);
-      transition: all 0.2s ease;
+      border-radius: 14px;
+      padding: 1.25rem;
     }
 
-    .nav-tabs a:hover {
-      background: var(--primary);
+    .stat-title {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .stat-value {
+      font-size: 1.75rem;
+      font-weight: 800;
       color: white;
+      margin-top: 0.25rem;
     }
 
-    .grid {
+    .main-grid {
       display: grid;
       grid-template-columns: 2fr 1fr;
-      gap: 2rem;
+      gap: 1.5rem;
     }
 
-    @media (max-width: 768px) {
-      .grid {
+    @media (max-width: 900px) {
+      .main-grid {
         grid-template-columns: 1fr;
       }
     }
 
-    .card {
-      background: var(--card-bg);
-      border-radius: 12px;
-      padding: 1.5rem;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    .panel {
+      background: var(--surface);
       border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
     }
 
-    .card h2 {
-      font-size: 1.35rem;
-      margin-bottom: 1rem;
-      color: var(--text-main);
+    .panel-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 0.5rem;
+    }
+
+    .panel-title {
+      font-size: 1.1rem;
+      font-weight: 700;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 0.5rem;
-    }
-
-    th, td {
-      padding: 0.75rem 1rem;
       text-align: left;
-      border-bottom: 1px solid var(--border);
     }
 
     th {
-      background-color: #f1f5f9;
+      background: rgba(15, 23, 42, 0.4);
       color: var(--text-muted);
-      font-weight: 600;
-      font-size: 0.85rem;
+      font-size: 0.75rem;
       text-transform: uppercase;
-    }
-
-    tr:hover {
-      background-color: #f8fafc;
-    }
-
-    .price {
+      padding: 0.85rem 1.5rem;
       font-weight: 600;
-      color: var(--text-main);
     }
 
-    .total-price {
-      font-weight: 700;
-      color: var(--success);
+    td {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid rgba(51, 65, 85, 0.4);
+      font-size: 0.925rem;
     }
 
-    .summary-item {
+    tr:hover td {
+      background: rgba(51, 65, 85, 0.2);
+    }
+
+    .item-tag {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--accent);
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .endpoint-item {
       display: flex;
-      justify-content: space-between;
-      padding: 0.75rem 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .summary-total {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--primary);
-      margin-top: 1rem;
-      border-bottom: none;
-    }
-
-    .api-list {
-      list-style: none;
-      margin-top: 1rem;
-    }
-
-    .api-list li {
-      padding: 0.6rem 0;
-      border-bottom: 1px solid var(--border);
-      font-size: 0.9rem;
-      display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1.25rem;
+      border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+      font-size: 0.875rem;
     }
 
-    .method {
+    .method-badge {
       display: inline-block;
       padding: 0.2rem 0.5rem;
-      border-radius: 4px;
-      font-size: 0.75rem;
+      border-radius: 6px;
+      font-size: 0.7rem;
       font-weight: 700;
-      color: white;
+      min-width: 55px;
+      text-align: center;
     }
 
-    .method.get { background-color: #0284c7; }
-    .method.post { background-color: #16a34a; }
-    .method.put { background-color: #d97706; }
-    .method.delete { background-color: #dc2626; }
+    .get { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+    .post { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+    .put { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+    .del { background: rgba(239, 68, 68, 0.2); color: #f87171; }
 
     footer {
       text-align: center;
-      margin-top: 3rem;
+      padding: 2rem;
+      border-top: 1px solid var(--border);
       color: var(--text-muted);
-      font-size: 0.9rem;
+      font-size: 0.85rem;
+      margin-top: 3rem;
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1>Shopping Cart Management Web Application</h1>
-    <p>Full Stack Development &bull; Node.js MT1 Lab Examination</p>
-    <span class="badge">Static File Served using Node.js FS Module</span>
+  <nav class="navbar">
+    <div class="brand">
+      <div class="brand-icon">🛒</div>
+      <span>ShoppingCart</span>
+    </div>
+    <div class="nav-links">
+      <a href="http://localhost:3000/">HTTP Server (/)</a>
+      <a href="http://localhost:3000/home" class="active">Home (/home)</a>
+      <a href="http://localhost:3000/cart">Cart JSON (/cart)</a>
+      <a href="http://localhost:3000/about">About (/about)</a>
+      <a href="http://localhost:4000/cart" target="_blank">Express API (:4000) &nearr;</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="badge-pill">
+      <span>●</span> Static File Served via Node.js FS Module
+    </div>
+    <h1>Shopping Cart Web Application</h1>
+    <p>Full Stack Development &bull; Node.js MT1 Practical Examination</p>
   </header>
 
-  <div class="container">
-    <div class="nav-tabs">
-      <a href="http://localhost:3000/">HTTP Server (/)</a>
-      <a href="http://localhost:3000/cart">View Cart JSON (/cart)</a>
-      <a href="http://localhost:3000/about">About App (/about)</a>
-      <a href="http://localhost:3000/home">Home (/home)</a>
-      <a href="http://localhost:4000/cart" target="_blank">Express API (:4000/cart)</a>
+  <main class="container">
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-title">Total Cart Items</div>
+        <div class="stat-value">3</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-title">Total Units In Cart</div>
+        <div class="stat-value">4</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-title">Cart Grand Total</div>
+        <div class="stat-value" style="color: #34d399;">₹5,396</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-title">Active Architecture</div>
+        <div class="stat-value" style="font-size: 1.15rem; color: #818cf8; margin-top: 0.5rem;">HTTP :3000 | Express :4000</div>
+      </div>
     </div>
 
-    <div class="grid">
-      <!-- Cart Table -->
-      <div class="card">
-        <h2>Active Shopping Cart Items</h2>
+    <div class="main-grid">
+      <!-- Active Cart -->
+      <section class="panel">
+        <div class="panel-header">
+          <span class="panel-title">Active Shopping Cart Inventory</span>
+          <span class="item-tag">In-Memory Array Store</span>
+        </div>
         <table>
           <thead>
             <tr>
               <th>ID</th>
-              <th>Product</th>
+              <th>Product Details</th>
               <th>Category</th>
               <th>Price</th>
               <th>Qty</th>
-              <th>Total</th>
+              <th>Item Total</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>1</td>
+              <td>#1</td>
               <td><strong>Wireless Mouse</strong></td>
-              <td>Electronics</td>
-              <td class="price">₹799</td>
+              <td><span class="item-tag">Electronics</span></td>
+              <td>₹799</td>
               <td>2</td>
-              <td class="total-price">₹1,598</td>
+              <td style="font-weight: 700; color: #34d399;">₹1,598</td>
             </tr>
             <tr>
-              <td>2</td>
+              <td>#2</td>
               <td><strong>Mechanical Keyboard</strong></td>
-              <td>Electronics</td>
-              <td class="price">₹2,499</td>
+              <td><span class="item-tag">Electronics</span></td>
+              <td>₹2,499</td>
               <td>1</td>
-              <td class="total-price">₹2,499</td>
+              <td style="font-weight: 700; color: #34d399;">₹2,499</td>
             </tr>
             <tr>
-              <td>3</td>
+              <td>#3</td>
               <td><strong>USB-C Multiport Hub</strong></td>
-              <td>Accessories</td>
-              <td class="price">₹1,299</td>
+              <td><span class="item-tag">Accessories</span></td>
+              <td>₹1,299</td>
               <td>1</td>
-              <td class="total-price">₹1,299</td>
+              <td style="font-weight: 700; color: #34d399;">₹1,299</td>
             </tr>
           </tbody>
         </table>
-      </div>
+      </section>
 
-      <!-- Cart Summary & APIs -->
-      <div>
-        <div class="card" style="margin-bottom: 1.5rem;">
-          <h2>Order Summary</h2>
-          <div class="summary-item">
-            <span>Unique Items</span>
-            <strong>3</strong>
+      <!-- API Reference -->
+      <aside class="panel">
+        <div class="panel-header">
+          <span class="panel-title">REST API Endpoints (:4000)</span>
+        </div>
+        <div>
+          <div class="endpoint-item">
+            <div><span class="method-badge get">GET</span> <code>/cart</code></div>
+            <span style="color: var(--text-muted);">List items</span>
           </div>
-          <div class="summary-item">
-            <span>Total Units</span>
-            <strong>4</strong>
+          <div class="endpoint-item">
+            <div><span class="method-badge get">GET</span> <code>/cart/:id</code></div>
+            <span style="color: var(--text-muted);">Get by ID</span>
           </div>
-          <div class="summary-item summary-total">
-            <span>Cart Grand Total</span>
-            <span>₹5,396</span>
+          <div class="endpoint-item">
+            <div><span class="method-badge post">POST</span> <code>/cart</code></div>
+            <span style="color: var(--text-muted);">Add product</span>
+          </div>
+          <div class="endpoint-item">
+            <div><span class="method-badge put">PUT</span> <code>/cart/:id</code></div>
+            <span style="color: var(--text-muted);">Update item</span>
+          </div>
+          <div class="endpoint-item">
+            <div><span class="method-badge del">DELETE</span> <code>/cart/:id</code></div>
+            <span style="color: var(--text-muted);">Delete item</span>
           </div>
         </div>
-
-        <div class="card">
-          <h2>Express REST Endpoints (:4000)</h2>
-          <ul class="api-list">
-            <li><span><span class="method get">GET</span> /cart</span> <span>List items</span></li>
-            <li><span><span class="method get">GET</span> /cart/:id</span> <span>Get item by ID</span></li>
-            <li><span><span class="method post">POST</span> /cart</span> <span>Add product</span></li>
-            <li><span><span class="method put">PUT</span> /cart/:id</span> <span>Update product</span></li>
-            <li><span><span class="method delete">DELETE</span> /cart/:id</span> <span>Remove product</span></li>
-          </ul>
-        </div>
-      </div>
+      </aside>
     </div>
+  </main>
 
-    <footer>
-      &copy; 2026 MT1-LABEXAM Shopping Cart Web Application | Node.js + Express.js
-    </footer>
-  </div>
+  <footer>
+    Node.js Full Stack Development MT1 Lab Exam &bull; Repository: <code>MT1-LABEXAM</code>
+  </footer>
 
 </body>
 </html>
